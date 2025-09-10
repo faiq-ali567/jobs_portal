@@ -30,6 +30,10 @@ class User < ApplicationRecord
     if picture.attached? == true &&  formats.include?(picture.blob.content_type) == false
       errors.add(:picture, "Wrong Format.")
     end
+
+    if picture.blob.byte_size > 5.megabytes
+      errors.add(:picture, "size must be less than 5 MB.")
+    end
   end
 
 end
