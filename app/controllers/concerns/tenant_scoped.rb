@@ -13,7 +13,7 @@ module TenantScoped
     if sub == "admin"
       Current.company =  nil
       unless current_user.admin? ||
-      current_user.company_manager? || current_user.user_manager?
+             current_user.company_manager? || current_user.user_manager?
         render json: { error: "Forbidden" }, status: :forbidden and return
       end
     elsif sub.match?(/\A[a-z0-9\-]+\z/i)
@@ -21,7 +21,7 @@ module TenantScoped
       unless company
         render json: { error: "Company not found" }, status: :not_found and return
       end
-      if current_user.company? && current_user.subdomain != sub
+      if current_user != nil && current_user.company? && current_user.subdomain != sub
         render json: { error: "Forbidden" }, status: :forbidden and return
       end
       Current.company = company

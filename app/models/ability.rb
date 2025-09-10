@@ -4,6 +4,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    can :read, User, role: User.roles[:company]
     return unless user.present?
     can :read, User, role: [
             User.roles[:candidate],
@@ -15,7 +16,7 @@ class Ability
     if user.admin?
       can :manage, :all
       cannot :update, User
-      cannot :read, id: user.id
+      can :update, User, id: user.id
       cannot :create, Job 
       cannot :create, Application  
 
@@ -28,6 +29,10 @@ class Ability
       can :create, Job, company_id: user.id
       can :update, Job, company_id: user.id 
       can :destroy, Job, company_id: user.id
+
+      cannot :read, User, role: [
+        User.roles[:admin], User.roles[:user_manager], User.roles[:company_manager],User.roles[:candidate]
+      ]
 
       can :change_status, Application, job: { company_id: user.id}
       cannot :change_status, Application, status: [Application.statuses[:rejected], Application.statuses[:hired]]
@@ -55,8 +60,14 @@ class Ability
       can :destroy, Application
       can :read, Job
     else
+      cannot :read, User, role: [
+        User.roles[:admin], User.roles[:user_manager], User.roles[:company_manager], User.roles[:candidate]
+      ]
+
       can :read, Job
+      can :read, User, id: user.id
       can :update, User, id: user.id
+
       can :create, Application, user_id: user.id
       can :read, Application, user_id: user.id
       cannot [:update, :destroy], Application

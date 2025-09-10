@@ -10,18 +10,17 @@ Rails.application.routes.draw do
   }
   namespace :api do 
     namespace :v1 do
-      get '/applications/get_all', to: "applications#get_all" 
       get '/me', to: "users#me"
-      get '/users/get_companies', to: "users#get_companies"
+      get '/', to: "users#index"
     end
   end
   constraints TextSubdomain do
     namespace :api do 
       namespace :v1 do
+        get '/applications', to: "applications#index"
         get '/users/get_all', to: "users#get_all"
         get '/me', to: "users#me"
         get '/show/:id', to: "users#show"
-        get '/applications/get_all', to: "applications#get_all"
         delete '/applications/:id', to: 'applications#destroy'
         delete '/users/:id', to: "users#destroy"
         resources :jobs do

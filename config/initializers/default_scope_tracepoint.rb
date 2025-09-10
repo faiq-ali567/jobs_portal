@@ -1,5 +1,5 @@
-tp = TracePoint.new(:class) do |t|
-  curr = t.self
+tp = TracePoint.new(:class) do |klass|
+  curr = klass.self
   if curr < ApplicationRecord && curr.name != "User" &&
     curr.name != "Document"
 

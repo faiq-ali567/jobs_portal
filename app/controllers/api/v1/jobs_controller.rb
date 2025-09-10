@@ -15,6 +15,7 @@ module Api
       end
 
       def create
+        # byebug
         if params[:job][:document].present?
           @job.build_document(file: params[:job][:document])
         end
